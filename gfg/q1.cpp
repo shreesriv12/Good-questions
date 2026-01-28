@@ -1,9 +1,10 @@
-MITM APPROACH 
+// MITM APPROACH 
 
-QUESTION 
-https://www.geeksforgeeks.org/problems/count-the-subset-with-sum-equal-to-k/1
+// QUESTION 
+// https://www.geeksforgeeks.org/problems/count-the-subset-with-sum-equal-to-k/1
 
-SOLUTION
+// SOLUTION
+
 class Solution {
   public:
     int countSubset(vector<int> &arr, int k) {
