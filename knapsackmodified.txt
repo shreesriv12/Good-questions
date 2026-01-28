@@ -1,0 +1,90 @@
+
+Instead of:
+dp[w] = max value with weight ≤ w
+we flip the DP:
+dp[v] = minimum weight needed to achieve total value = v
+
+Why this works:
+Each v_i ≤ 1000
+N ≤ 100
+
+Maximum total value = 100 * 1000 = 100000
+
+DP Definition
+
+Let
+dp[v] = minimum total weight required to get total value = v
+
+Initialize everything as INF
+dp[0] = 0 (value 0 requires weight 0)
+
+
+Transition (0/1 Knapsack)
+For each item (w, v)
+Loop value backwards (important to avoid reuse):
+dp[new_v] = min(dp[new_v], dp[old_v] + w)
+
+
+Specifically:
+for val from maxValue down to v:
+    dp[val] = min(dp[val], dp[val - v] + w)
+
+
+
+Final Answer
+After filling DP:
+Find the largest value v such that dp[v] ≤ W
+That’s your answer 
+Complexity
+
+Time: O(N * sum(values)) → 100 * 100000 = 1e7 
+
+Memory: O(sum(values)) 
+
+C++ Implementation (Accepted)
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N;
+    long long W;
+    cin >> N >> W;
+
+    vector<int> w(N), v(N);
+    for (int i = 0; i < N; i++) {
+        cin >> w[i] >> v[i];
+    }
+
+    int maxV = 1000 * N;
+    const long long INF = 1e18;
+
+    // dp[value] = minimum weight to achieve this value
+    vector<long long> dp(maxV + 1, INF);
+    dp[0] = 0;
+
+    for (int i = 0; i < N; i++) {
+        for (int val = maxV; val >= v[i]; val--) {
+            dp[val] = min(dp[val], dp[val - v[i]] + w[i]);
+        }
+    }
+
+    int ans = 0;
+    for (int val = 0; val <= maxV; val++) {
+        if (dp[val] <= W) {
+            ans = val;
+        }
+    }
+
+    cout << ans << "\n";
+    return 0;
+}
+
+
+
+
+ One-line intuition to remember
+
+When weight is too large → DP on value
