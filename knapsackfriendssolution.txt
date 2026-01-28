@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+// dekh dekh !!
+// wi wi+1 wi+2.....  W<=1e9 ->apa current capacity ko state ni le skte !!
+// vi vi+1 vi+2...... sum of all vi <=1e5
+// dp[i][val]-> can i make the sum val using using items from n-1 to 0 ?
+// ab u have 2 option :) ya to chup chap bottom up maro ,
+// ya fer mere code ki trah g masti kro-:
+
+ll dp[105][100005];
+
+ll solve(int x, int val, vector<ll> &w, vector<ll> &v)
+{
+    // it return total w to make val
+    if (val == 0)
+        return 0;
+    if (x < 0)
+        return 1e15;
+
+    ll &z = dp[x][val];
+    if (z != -1)
+        return z;
+
+    // not take
+    ll cost = solve(x - 1, val, w, v);
+    // take
+    if (val >= v[x])
+        cost = min(cost, w[x] + solve(x - 1, val - v[x], w, v));
+    return z = cost;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    ll W;
+    cin >> n >> W;
+    vector<ll> w(n), v(n);
+    for (int i = 0; i < n; i++)
+        cin >> w[i] >> v[i];
+
+    ll totalV = accumulate(v.begin(), v.end(), 0LL);
+
+    // memset -:
+    for (int i = 0; i < n; i++)
+        for (int val = 0; val <= totalV; val++)
+            dp[i][val] = -1;
+
+    // sbse bada total v sum chaie  na ? end se loop kr
+
+    for (int val = totalV; val >= 0; val--)
+        if (solve(n - 1, val, w, v) <= W) // {check krra hu ki jitni min capacity me
+        {                                 // v sum bna skta hu wo W se kam h na?}
+            cout << val << endl;
+            break;
+        }
+
+    return 0;
+}
