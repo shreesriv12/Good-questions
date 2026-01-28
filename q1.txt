@@ -1,0 +1,47 @@
+MITM APPROACH 
+
+QUESTION 
+https://www.geeksforgeeks.org/problems/count-the-subset-with-sum-equal-to-k/1
+
+SOLUTION
+class Solution {
+  public:
+    int countSubset(vector<int> &arr, int k) {
+        int n=arr.size();
+        int mid=n/2;
+        vector<int>left(arr.begin(),arr.begin()+mid);
+        vector<int>right(arr.begin()+mid,arr.end());
+        vector<int>l,r;
+        int nl=left.size();
+        for(int mask=0;mask<(1LL<<nl);mask++)
+        {
+            long long sum=0;
+            for(int i=0;i<nl;i++)
+            {
+                if(mask&(1LL<<i))
+                sum+=left[i];
+            }
+            l.push_back(sum);
+        }
+        int nr=right.size();
+        for(int mask=0;mask<(1LL<<nr);mask++)
+        {
+            long long sum=0;
+            for(int i=0;i<n;i++)
+            {
+                if(mask&(1LL<<i))
+                sum+=right[i];
+            }
+            r.push_back(sum);
+        }
+        sort(r.begin(),r.end());
+        int ans=0;
+        for(long long i=0;i<l.size();i++)
+        {
+            long long need=k-l[i];
+            auto range=equal_range(r.begin(),r.end(),need);
+            ans+=(range.second-range.first);
+        }
+        return ans;
+    }
+};
